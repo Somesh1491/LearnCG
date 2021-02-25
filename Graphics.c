@@ -66,9 +66,79 @@ void Line(int x1, int y1, int x2, int y2)
 
     int d = 2 * dy - dx;
     int d_E = 2 * dy;  // For east
-    int d_NE = 2 * (dy - dx);
+    int d_NE = 2 * (dy - dx); //For north east
 
-    putpixel(x, y);
+    int octant = 0;
+    float slope = (float)dy / dx;
+    
+    if (slope >= 0) //1st 2nd 5th 6th octant
+    {
+        if (abs(dy) <= abs(dx)) //1st 5th octant
+        {
+            if (x2 >= x1)   //1st octant
+                octant = 1;
+            else
+                octant = 5; //5th octant
+        }
+
+        else //2nd 6th octant
+        {
+            if (y2 >= y1) //2nd octant
+                octant = 2;
+            else
+                octant = 6; //6th octant
+        }
+    }
+
+    else   //3rd 4th 7th 8th octant
+    {
+        if (abs(dy) <= abs(dx)) //4th 8th octant
+        {
+            if (x2 <= x1) //4th octant
+                octant = 4;
+            else
+                octant = 8; //8th octant
+        }
+
+        else //3rd 7th octant
+        {
+            if (y2 >= y1)
+                octant = 3; //3rd octant
+            else
+                octant = 7; //7th octant
+        }
+    }
+
+    switch (octant)
+    {
+    case 1:
+        putpixel(x, y);
+        break;
+    case 2:
+        putpixel(y, x);
+        break;
+    case 3:
+        putpixel(-y, x);
+        break;
+    case 4:
+        putpixel(-x, y);
+        break;
+    case 5:
+        putpixel(-x, -y);
+        break;
+    case 6:
+        putpixel(-y, -x);
+        break;
+    case 7:
+        putpixel(y, -x);
+        break;
+    case 8:
+        putpixel(x, -y);
+        break;
+    default:
+        break;
+    }
+
     while (x < x2)
     {
         if (d <= 0)
@@ -82,6 +152,34 @@ void Line(int x1, int y1, int x2, int y2)
 
         x++;
 
-        putpixel(x, y);
+        switch (octant)
+        {
+        case 1:
+            putpixel(x, y);
+            break;
+        case 2:
+            putpixel(y, x);
+            break;
+        case 3:
+            putpixel(-y, x);
+            break;
+        case 4:
+            putpixel(-x, y);
+            break;
+        case 5:
+            putpixel(-x, -y);
+            break;
+        case 6:
+            putpixel(-y, -x);
+            break;
+        case 7:
+            putpixel(y, -x);
+            break;
+        case 8:
+            putpixel(x, -y);
+            break;
+        default:
+            break;
+        }
     }
 }

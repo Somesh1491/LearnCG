@@ -2,6 +2,7 @@
 
 #include "SDL.h"
 #include <stdio.h>
+#include <math.h>
 
 void InitWindow(const char* title, int width, int height);
 void Draw();
