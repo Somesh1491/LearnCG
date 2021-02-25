@@ -29,11 +29,6 @@ void InitWindow(const char*title, int width, int height)
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
 
-void putpixel(int x, int y)
-{
-    SDL_RenderDrawPoint(renderer, x, h - y);
-}
-
 void Draw()
 {
     SDL_RenderPresent(renderer);
@@ -44,10 +39,10 @@ int QuitWindow()
     SDL_PollEvent(&event);
 
     if (event.type == SDL_QUIT) {
-        return 0;
+        return 1;
     }
 
-    return 1;
+    return 0;
 }
 
 void CloseWindow()
@@ -55,4 +50,38 @@ void CloseWindow()
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+void putpixel(int x, int y)
+{
+    SDL_RenderDrawPoint(renderer, x, h - y);
+}
+
+void Line(int x1, int y1, int x2, int y2)
+{
+    int x = x1;
+    int y = y1;
+    int dy = y2 - y1;
+    int dx = x2 - x1;
+
+    int d = 2 * dy - dx;
+    int d_E = 2 * dy;  // For east
+    int d_NE = 2 * (dy - dx);
+
+    putpixel(x, y);
+    while (x < x2)
+    {
+        if (d <= 0)
+            d = d + d_E;
+
+        else
+        {
+            d = d + d_NE;
+            y++;
+        }
+
+        x++;
+
+        putpixel(x, y);
+    }
 }

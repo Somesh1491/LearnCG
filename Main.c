@@ -1,17 +1,18 @@
+#include <stdio.h> 
+#include <stdlib.h> 
 #include "Graphics.h"
-#include <stdio.h>
 
 int main()
-{   
-    InitWindow("Computer Graphics", 800, 600);
+{
+	InitWindow("LearnCG", 800, 600);
 
-    putpixel(100, 200);
-    Draw();
+	Line(0, 0, 300, 200);
+	Draw();
 
-    while (QuitWindow())
-    {
+	while (!QuitWindow())
+	{
 
-    }
+	}
 
-    return -1;
+	CloseWindow();
 }
