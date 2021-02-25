@@ -57,7 +57,56 @@ void putpixel(int x, int y)
     SDL_RenderDrawPoint(renderer, x, h - y);
 }
 
+void MidPointLine_Alogrithm(int x1, int y1, int x2, int y2, int octant);
 void Line(int x1, int y1, int x2, int y2)
+{
+    int dy = y2 - y1;
+    int dx = x2 - x1;
+
+    int octant = 0;
+    float slope = (float)dy / dx;
+    
+    if (slope >= 0) //1st 2nd 5th 6th octant
+    {
+        if (abs(dy) <= abs(dx)) //1st 5th octant
+        {
+            if (x2 >= x1)   //1st octant
+                MidPointLine_Alogrithm(x1, y1, x2, y2, 1);
+            else
+                MidPointLine_Alogrithm(-x1, -y1, -x2, -y2, 5); //5th octant
+        }
+
+        else //2nd 6th octant
+        {
+            if (y2 >= y1) //2nd octant
+                MidPointLine_Alogrithm(y1, x1, y2, x2, 2);
+            else
+                MidPointLine_Alogrithm(-y1, -x1, -y2, -x2, 6); //6th octant
+        }
+    }
+
+    else   //3rd 4th 7th 8th octant
+    {
+        if (abs(dy) <= abs(dx)) //4th 8th octant
+        {
+            if (x2 <= x1) //4th octant
+                MidPointLine_Alogrithm(-x1, y1, -x2, y2, 4);
+            else
+                MidPointLine_Alogrithm(x1, -y1, x2, -y2, 8); //8th octant
+        }
+
+        else //3rd 7th octant
+        {
+            if (y2 >= y1)
+                MidPointLine_Alogrithm(y1, -x1, y2, -x2, 3); //3rd octant
+            else
+                MidPointLine_Alogrithm(-y1, x1, -y2, x2, 7); //7th octant
+        }
+    }
+    
+}
+
+void MidPointLine_Alogrithm(int x1, int y1, int x2, int y2, int octant)
 {
     int x = x1;
     int y = y1;
@@ -68,47 +117,6 @@ void Line(int x1, int y1, int x2, int y2)
     int d_E = 2 * dy;  // For east
     int d_NE = 2 * (dy - dx); //For north east
 
-    int octant = 0;
-    float slope = (float)dy / dx;
-    
-    if (slope >= 0) //1st 2nd 5th 6th octant
-    {
-        if (abs(dy) <= abs(dx)) //1st 5th octant
-        {
-            if (x2 >= x1)   //1st octant
-                octant = 1;
-            else
-                octant = 5; //5th octant
-        }
-
-        else //2nd 6th octant
-        {
-            if (y2 >= y1) //2nd octant
-                octant = 2;
-            else
-                octant = 6; //6th octant
-        }
-    }
-
-    else   //3rd 4th 7th 8th octant
-    {
-        if (abs(dy) <= abs(dx)) //4th 8th octant
-        {
-            if (x2 <= x1) //4th octant
-                octant = 4;
-            else
-                octant = 8; //8th octant
-        }
-
-        else //3rd 7th octant
-        {
-            if (y2 >= y1)
-                octant = 3; //3rd octant
-            else
-                octant = 7; //7th octant
-        }
-    }
-
     switch (octant)
     {
     case 1:
@@ -118,7 +126,7 @@ void Line(int x1, int y1, int x2, int y2)
         putpixel(y, x);
         break;
     case 3:
-        putpixel(-y, x);
+        putpixel(y, -x);
         break;
     case 4:
         putpixel(-x, y);
@@ -130,7 +138,7 @@ void Line(int x1, int y1, int x2, int y2)
         putpixel(-y, -x);
         break;
     case 7:
-        putpixel(y, -x);
+        putpixel(-y, x);
         break;
     case 8:
         putpixel(x, -y);
